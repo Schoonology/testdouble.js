@@ -24,6 +24,12 @@ describe 'td.object', ->
     Then -> expect(@result.message).to.contain(
       "Please use `td.function()` or `td.constructor()` instead")
 
+  describe 'passing a callback object to td.object', ->
+    Given -> @callable = ->
+    Given -> @callable.someMethod = ->
+    Given -> @testDouble = td.object(@callable)
+    When -> td.when(@testDouble.someMethod('hi')).thenReturn('consider me greeted')
+    Then -> @testDouble.someMethod('hi') == 'consider me greeted'
 
   if global.Proxy?
     describe 'creating a proxy object (ES2015; only supported in FF + Edge atm)', ->
